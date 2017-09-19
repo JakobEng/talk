@@ -5,12 +5,12 @@ services:
       context: ./api
       dockerfile: Dockerfile
     command: ./node_modules/.bin/nodemon server.js
-    networks:
-      - rabbit-network
-      - default
     volumes:
       - ./api:/app
       - /app/node_modules
+    networks:
+      - rabbit-network
+      - default
     external_links:
       - talk_rabbit_1:rabbit
 
