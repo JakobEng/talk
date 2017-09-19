@@ -1,9 +1,6 @@
-const express = require("express")
+const open = require('amqplib').connect('amqp://rabbit')
 
-let app = express()
+const mqCall = require("./funcs/mqCallGen")(open)
 
-app.get('/', (req,res) => {
-  return res.send("hello")
-})
-
-app.listen(80)
+mqCall("test", "I'm killing it")
+console.log("hello")
