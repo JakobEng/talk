@@ -1,0 +1,17 @@
+version: "2"
+services:
+  calculater:
+    build:
+      context: ./cal
+      dockerfile: Dockerfile
+    command: go run main.go
+    networks:
+      - rabbit-network
+      - default
+    external_links:
+      - talk_rabbit_1:rabbit
+
+networks:
+  rabbit-network:
+    external:
+      name: talk_default
