@@ -4,7 +4,9 @@ services:
     build:
       context: ./cal
       dockerfile: Dockerfile
-    command: go run main.go
+    command: CompileDaemon -build="go install" -command="app" 
+    volumes:
+      - ./cal:/go/src/app
     networks:
       - rabbit-network
       - default
