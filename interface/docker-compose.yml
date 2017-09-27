@@ -13,6 +13,14 @@ services:
       - default
     external_links:
       - talk_rabbit_1:rabbit
+  proxy:
+    build:
+      context: ./proxy
+      dockerfile: Dockerfile
+    ports:
+      - 80:80
+    depends_on:
+      - api
 
 networks:
   rabbit-network:
