@@ -6,8 +6,8 @@ const mqCall = require("./funcs/mqCallGen")(open)
 let app = express()
 
 app.get('/', (req,res) => {
-  mqCall("rpc_queue", "20").then(res => {
-    res.send(res)
+  mqCall("rpc_queue", "20").then(data => {
+    res.send(data)
   })
 })
 
