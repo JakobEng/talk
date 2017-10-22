@@ -17,6 +17,8 @@ services:
     build:
       context: ./proxy
       dockerfile: Dockerfile
+    volumes:
+      - ./proxy/static:/static
     ports:
       - 80:80
     depends_on:

@@ -1,11 +1,14 @@
 package main
 
 import (
-	rabbit "app/rabbit"
+	"app/rabbit"
 	"log"
 	"strconv"
 
 	"github.com/streadway/amqp"
+
+	"gopkg.in/mgo.v2"
+	// "gopkg.in/mgo.v2/bson"
 )
 
 func failOnError(err error, msg string) {
@@ -25,6 +28,13 @@ func fib(n int) int {
 }
 
 func main() {
+	session, err := mgo.Dial("mongo")
+	failOnError(err, "Failed to connect to mongoDB")
+	defer session.Close()
+
+	session.SetMode(mgo.Monotonic, true)
+	ensureIndex(session)
+
 	conn, err := amqp.Dial("amqp://rabbit/")
 	failOnError(err, "Failed to connect to RabbitMQ")
 	defer conn.Close()
@@ -39,4 +49,23 @@ func main() {
 		return fib(n)
 	})
 
+}
+
+func ensureIndex(s *mgo.Session) {
+	session := s.Copy()
+	defer session.Close()
+
+	c := session.DB("store").C("books")
+
+	index := mgo.Index{
+		Key:        []string{"isbn"},
+		Unique:     true,
+		DropDups:   true,
+		Background: true,
+		Sparse:     true,
+	}
+	err := c.EnsureIndex(index)
+	if err != nil {
+		panic(err)
+	}
 }

@@ -4,7 +4,7 @@ services:
     build:
       context: ./cal
       dockerfile: Dockerfile
-    command: CompileDaemon -build="go install" -command="app" 
+    command: CompileDaemon -build="go install" -command="app"
     volumes:
       - ./cal:/go/src/app
     networks:
@@ -12,6 +12,10 @@ services:
       - default
     external_links:
       - talk_rabbit_1:rabbit
+    depends_on:
+      - mongo
+  mongo:
+    image: mongo:3
 
 networks:
   rabbit-network:
